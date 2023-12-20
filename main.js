@@ -1,5 +1,3 @@
-const mqtt = require('mqtt');
-
 // your credentials
 const options = {
   username: 'Eidyn',
