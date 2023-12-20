@@ -2,7 +2,7 @@ const options = {
   username: 'Eidyn',
   password: 'Mqtt1111',
   protocol: 'wss', // Specify the WebSocket protocol
-  port: 8883,      // Specify the port for WSS
+  port: 8884,      // Specify the port for WSS
   path: '/mqtt',   // Specify the WebSocket path
 };
 
