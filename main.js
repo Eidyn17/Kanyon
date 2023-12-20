@@ -1,11 +1,10 @@
-// your credentials
 const options = {
   username: 'Eidyn',
   password: 'Mqtt1111',
+  protocol: 'wss', // Specify the WebSocket protocol
 };
 
-// connect to your cluster, insert your host name and port
-const client = mqtt.connect('wss://95ea70d6edb34e4a956c8f346ae8fba8.s1.eu.hivemq.cloud:8883', options);
+const client = mqtt.connect('tls://95ea70d6edb34e4a956c8f346ae8fba8.s1.eu.hivemq.cloud:8883', options);
 
 // prints a received message
 client.on('message', function(topic, message) {
