@@ -9,6 +9,13 @@
 </head>
 <body>
 
+<h1>MQTT Publisher/Subscriber</h1>
+
+<!-- Display received values for subscribed topics -->
+<div id="hvVoltage"></div>
+<div id="lvVoltage"></div>
+<div id="lvSoc"></div>
+
 <script>
     // Replace with your actual HiveMQ Cloud credentials
     const host = "95ea70d6edb34e4a956c8f346ae8fba8.s1.eu.hivemq.cloud";
@@ -46,7 +53,21 @@
     // Handle incoming messages
     client.on("message", (topic, payload, packet) => {
         // Handle incoming messages here
-        console.log(`Received message on topic '${topic}': ${payload}`);
+
+        // Display the received values for subscribed topics
+        switch (topic) {
+            case "Kanyon/HV_Voltage":
+                document.getElementById("hvVoltage").innerText = `HV Voltage: ${payload}`;
+                break;
+            case "Kanyon/LV_Voltage":
+                document.getElementById("lvVoltage").innerText = `LV Voltage: ${payload}`;
+                break;
+            case "Kanyon/LV_soc":
+                document.getElementById("lvSoc").innerText = `LV State of Charge: ${payload}`;
+                break;
+            default:
+                break;
+        }
     });
 </script>
 
