@@ -12,8 +12,17 @@
       color: white;
     }
 
-    #message-display {
-      padding: 20px; /* Add padding for better visibility */
+    .section {
+      margin-bottom: 20px; /* Add margin between sections for better visibility */
+    }
+
+    .section-header {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .message-field {
+      padding: 10px; /* Add padding for better visibility */
     }
 
     p {
@@ -23,12 +32,26 @@
 </head>
 <body>
 
-<!-- Display area for messages -->
-<div id="message-display">
-  <p id="hv-voltage">HV Voltage: </p>
-  <p id="lv-voltage">LV Voltage: </p>
-  <p id="lv-soc">LV SOC: </p>
-  <p id="temperature">Temperature: </p>
+<!-- HV Battery Section -->
+<div class="section" id="hv-battery">
+  <div class="section-header">HV Battery</div>
+  <div class="message-field">
+    <p id="hv-voltage">HV Voltage: </p>
+  </div>
+  <div class="message-field">
+    <p id="temperature">Temperature: </p>
+  </div>
+</div>
+
+<!-- LV Battery Section -->
+<div class="section" id="lv-battery">
+  <div class="section-header">LV Battery</div>
+  <div class="message-field">
+    <p id="lv-voltage">LV Voltage: </p>
+  </div>
+  <div class="message-field">
+    <p id="lv-soc">LV SOC: </p>
+  </div>
 </div>
 
 <script src="main.js"></script>
