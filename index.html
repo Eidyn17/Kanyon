@@ -91,8 +91,25 @@
         return;
     }
 
+    // Append units based on the topic
+    var units = '';
+    switch (topic) {
+      case 'Kanyon/HV_Voltage':
+        units = ' V';
+        break;
+      case 'Kanyon/Temp':
+        units = ' °C';
+        break;
+      case 'Kanyon/LV_Voltage':
+        units = ' mV';
+        break;
+      case 'Kanyon/LV_soc':
+        units = ' %';
+        break;
+    }
+
     // Update the text content of the corresponding element
-    document.getElementById(elementId).textContent = fieldLabel + ': ' + String.fromCharCode.apply(null, message);
+    document.getElementById(elementId).textContent = fieldLabel + ': ' + String.fromCharCode.apply(null, message) + units;
   }
 
   // Override the message handling function in main.js
@@ -104,6 +121,3 @@
 
 </body>
 </html>
-
-
-
