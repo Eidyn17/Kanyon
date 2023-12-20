@@ -5,13 +5,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MQTT Webpage</title>
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <style>
+    body {
+      font-family: 'Amazon Ember', sans-serif;
+      background-color: #100030;
+      color: white;
+    }
+
+    #message-display {
+      padding: 20px; /* Add padding for better visibility */
+    }
+
+    p {
+      margin: 0; /* Remove default paragraph margin */
+    }
+  </style>
 </head>
 <body>
 
-<!-- Your content will go here -->
+<!-- Display area for messages -->
+<div id="message-display">
+  <p id="hv-voltage">HV Voltage: </p>
+  <p id="lv-voltage">LV Voltage: </p>
+  <p id="lv-soc">LV SOC: </p>
+  <p id="temperature">Temperature: </p>
+</div>
 
 <script src="main.js"></script>
+
+<script>
+  // Function to update the message display
+  function updateMessageDisplay(topic, message) {
+    // Get the corresponding element based on the topic
+    var elementId;
+    var fieldLabel;
+    
+    switch (topic) {
+      case 'Kanyon/HV_Voltage':
+        elementId = 'hv-voltage';
+        fieldLabel = 'HV Voltage';
+        break;
+      case 'Kanyon/LV_Voltage':
+        elementId = 'lv-voltage';
+        fieldLabel = 'LV Voltage';
+        break;
+      case 'Kanyon/LV_soc':
+        elementId = 'lv-soc';
+        fieldLabel = 'LV SOC';
+        break;
+      case 'Kanyon/Temp':
+        elementId = 'temperature';
+        fieldLabel = 'Temperature';
+        break;
+      default:
+        // Ignore other topics
+        return;
+    }
+
+    // Update the text content of the corresponding element
+    document.getElementById(elementId).textContent = fieldLabel + ': ' + String.fromCharCode.apply(null, message);
+  }
+
+  // Override the message handling function in main.js
+  client.on('message', function(topic, message) {
+    // Call the updateMessageDisplay function with the received topic and message
+    updateMessageDisplay(topic, message);
+  });
+</script>
+
 </body>
 </html>
+
 
 
