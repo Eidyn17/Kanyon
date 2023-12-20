@@ -1,70 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MQTT Publisher/Subscriber</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MQTT Webpage</title>
 </head>
 <body>
 
-<h1>MQTT Publisher/Subscriber</h1>
+<!-- Your content will go here -->
 
-<!-- Display received values for subscribed topics -->
-<div id="hvVoltage"></div>
-<div id="lvVoltage"></div>
-<div id="lvSoc"></div>
-
-<script>
-    // Create a client instance
-    const client = new Paho.MQTT.Client("95ea70d6edb34e4a956c8f346ae8fba8.s1.eu.hivemq.cloud", 8884, "clientId" + new Date().getTime());
-
-    // set callback handlers
-    client.onConnectionLost = onConnectionLost;
-    client.onMessageArrived = onMessageArrived;
-
-    // connect the client
-    client.connect({
-        useSSL: true,
-        onSuccess: onConnect,
-        userName: "Eidyn",
-        password: "Mqtt1111",
-    });
-
-    // called when the client connects
-    function onConnect() {
-        // Once connected, subscribe to topics
-        client.subscribe("Kanyon/HV_Voltage");
-        client.subscribe("Kanyon/LV_Voltage");
-        client.subscribe("Kanyon/LV_SOC");
-    }
-
-    // called when a message arrives
-    function onMessageArrived(message) {
-        // Update UI based on received messages
-        switch (message.destinationName) {
-            case 'Kanyon/HV_Voltage':
-                document.getElementById('hvVoltage').innerText = `HV Voltage: ${message.payloadString}`;
-                break;
-            case 'Kanyon/LV_Voltage':
-                document.getElementById('lvVoltage').innerText = `LV Voltage: ${message.payloadString}`;
-                break;
-            case 'Kanyon/LV_SOC':
-                document.getElementById('lvSoc').innerText = `LV SOC: ${message.payloadString}`;
-                break;
-            default:
-                break;
-        }
-    }
-
-    // called when the client loses its connection
-    function onConnectionLost(responseObject) {
-        if (responseObject.errorCode !== 0) {
-            console.log("Connection lost: " + responseObject.errorMessage);
-        }
-    }
-</script>
-
+<script src="main.js"></script>
 </body>
 </html>
+
 
