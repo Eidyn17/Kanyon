@@ -38,45 +38,27 @@
 </head>
 <body>
 
-<!-- Add this div to your HTML where you want to display messages -->
-<div id="message-container"></div>
-
-
-<!-- Add a login form -->
-<form id="login-form-container">
-  <div id="login-form-container">
-    <label for="username">Username:</label>
-    <input type="text" id="username" required>
-    <label for="password">Password:</label>
-    <input type="password" id="password" required>
-    <button onclick="authenticateAndConnect()">Login</button>
+<!-- HV Battery Section -->
+<div class="section" id="hv-battery">
+  <div class="section-header">HV Battery</div>
+  <div class="message-field">
+    <p id="hv-voltage">HV Voltage: </p>
   </div>
-</form>
-
-<!-- Display messages and data after successful login -->
-<div id="content" style="display:none;">
-
-  <!-- HV Battery Section -->
-  <div class="section" id="hv-battery">
-    <div class="section-header">HV Battery</div>
-    <div class="message-field">
-      <p id="hv-voltage">HV Voltage: </p>
-    </div>
-    <div class="message-field">
-      <p id="temperature">Temperature: </p>
-    </div>
+  <div class="message-field">
+    <p id="temperature">Temperature: </p>
   </div>
+</div>
 
-  <!-- LV Battery Section -->
-  <div class="section" id="lv-battery">
-    <div class="section-header">LV Battery</div>
-    <div class="message-field">
-      <p id="lv-voltage">LV Voltage: </p>
-    </div>
-    <div class="message-field">
-      <p id="lv-soc">LV SOC: </p>
-    </div>
+<!-- LV Battery Section -->
+<div class="section" id="lv-battery">
+  <div class="section-header">LV Battery</div>
+  <div class="message-field">
+    <p id="lv-voltage">LV Voltage: </p>
   </div>
+  <div class="message-field">
+    <p id="lv-soc">LV SOC: </p>
+  </div>
+</div>
 
 <script src="main.js"></script>
 
