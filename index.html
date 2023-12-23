@@ -95,6 +95,7 @@ function attemptLogin() {
     protocol: 'wss',
     port: 8884,
     path: '/mqtt',
+    clean: true,
   };
 
   // Create a new MQTT client
