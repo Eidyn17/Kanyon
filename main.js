@@ -65,7 +65,7 @@ client.on('message', function(topic, message) {
   updateMessageDisplay(topic, message);
 });
 
-  // prints an error message
+// prints an error message
 client.on('error', (error) => {
   console.log('Error:', error);
 });
