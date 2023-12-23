@@ -2,6 +2,7 @@
 function publishMessage() {
   if (client) {
     client.publish('Kanyon/mqtt_request', '1');
+    console.log('MQTT Request Sent.');
   }
 }
 
