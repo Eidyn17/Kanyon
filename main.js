@@ -78,3 +78,6 @@ client.subscribe('Kanyon/LV_Voltage');
 
 // Set up an interval to call the publishMessage function every 5 seconds (5000 milliseconds)
 setInterval(publishMessage, 5000);
+
+// First load of values
+publishMessage()
