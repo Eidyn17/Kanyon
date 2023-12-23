@@ -50,8 +50,11 @@ function publishMessage() {
         break;
     }
 
+    // Convert the message to a string and round to 2 decimal places
+    var roundedValue = parseFloat(String.fromCharCode.apply(null, message)).toFixed(2);
+
     // Update the text content of the corresponding element
-    document.getElementById(elementId).textContent = fieldLabel + ': ' + String.fromCharCode.apply(null, message) + units;
+    document.getElementById(elementId).textContent = fieldLabel + ': ' + roundedValue + units;
 
   }
 
