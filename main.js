@@ -1,8 +1,12 @@
 // Function to publish a message every 5 seconds
 function publishMessage() {
-  if (client) {
-    client.publish('Kanyon/mqtt_request', '1');
-    console.log('MQTT Request Sent.');
+  if (navigator.onLine) {
+    if (client) {
+      client.publish('Kanyon/mqtt_request', '1');
+      console.log('MQTT Request Sent.');
+    }
+  } else {
+    console.log('Not connected to the internet. Message not sent.');
   }
 }
 
