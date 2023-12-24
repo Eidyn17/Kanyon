@@ -13,23 +13,43 @@
       background-color: #100030;
       color: white;
       margin: 0; /* Remove default margin */
+      display: flex; /* Use flexbox for the body */
+      flex-direction: column; /* Stack children vertically */
+      align-items: center; /* Center children horizontally */
     }
 
     #header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      background-color: #1e1e1e;
+      text-align: center; /* Center the children horizontally */
+      padding: 10px 10px 0; /* Set top and right padding to 10px, bottom padding to 0 */
+      background-color: #100030; /* Set the background color to match the body */
+      margin-bottom: 0; /* Set the margin bottom to 0 */
     }
 
     #header img {
       max-width: 100%;
       height: auto;
+      margin: 10px auto; /* Center the image horizontally with a top margin of 10px */
+      display: block; /* Make the image a block element */
     }
 
+    #header img#defender_front {
+      width: 16%; /* Set the default width to 16% for defender_front image */
+    }
+
+    .sections-container {
+      display: flex; /* Use flexbox for the sections container */
+      flex-wrap: wrap; /* Allow items to wrap onto the next line */
+      justify-content: flex-start; /* Left-align items */
+      align-items: flex-start; /* Left-align items */
+      align-self: flex-start; /* Left-align the container itself */
+      width: 95%;
+    }
+ 
     .section {
       margin-bottom: 20px;
+      width: 30%; /* Set the width of each section */
+      min-width: 200px; /* Set a minimum width to prevent too narrow sections */
+      padding: 10px;
     }
 
     .section-header {
@@ -41,6 +61,10 @@
       background-color: #5a41fa;
       color: #fff;
       margin-top: 0;
+      /* Add padding and border-radius to the right side */
+      padding-right: 15px;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
     }
 
     .message-field {
@@ -53,13 +77,23 @@
 
     /* Additional styles for mobile optimization */
     @media (max-width: 600px) {
-      #header {
-        flex-direction: column;
-        align-items: center;
+      .sections-container {
+        flex-direction: column; /* Stack sections vertically on narrow screens */
       }
 
       #header img {
         margin-bottom: 10px;
+      }
+
+      .section {
+        width: 100%; /* Set the width to 100% on narrow screens */
+      }
+
+      /* Adjust section header styles for smaller screens */
+      .section-header {
+        padding-right: 10px; /* Adjust padding for smaller screens */
+        border-top-right-radius: 8px; /* Adjust border-radius for smaller screens */
+        border-bottom-right-radius: 8px; /* Adjust border-radius for smaller screens */
       }
     }
   </style>
@@ -68,43 +102,46 @@
 
 <!-- Header with Images -->
 <div id="header">
-  <img src="static/defender_front.png" alt="Defender Front Image">
-  <img src="static/defender_side.png" alt="Defender Side Image">
+  <img id="defender_front" src="static/defender_front.png" alt="Defender Front Image">
 </div>
 
-<!-- Login Section -->
-<div id="login-section">
-  <h2>Login</h2>
-  <form id="login-form" onsubmit="attemptLogin(); return false;">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    <br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    <br>
-    <button type="submit">Login</button>
-  </form>
-</div>
+<!-- Sections Container -->
+<div class="sections-container">
 
-<!-- HV Battery Section -->
-<div class="section" id="hv-battery">
-  <div class="section-header">HV Battery</div>
-  <div class="message-field">
-    <p id="hv-voltage">HV Voltage: </p>
+  <!-- Login Section -->
+  <div id="login-section" class="section">
+    <h2>Login</h2>
+    <form id="login-form" onsubmit="attemptLogin(); return false;">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      <br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <br>
+      <button type="submit">Login</button>
+    </form>
   </div>
-  <div class="message-field">
-    <p id="temperature">Temperature: </p>
-  </div>
-</div>
 
-<!-- LV Battery Section -->
-<div class="section" id="lv-battery">
-  <div class="section-header">LV Battery</div>
-  <div class="message-field">
-    <p id="lv-voltage">LV Voltage: </p>
+  <!-- HV Battery Section -->
+  <div class="section" id="hv-battery">
+    <div class="section-header">HV Battery</div>
+    <div class="message-field">
+      <p id="hv-voltage">HV Voltage: </p>
+    </div>
+    <div class="message-field">
+      <p id="temperature">Temperature: </p>
+    </div>
   </div>
-  <div class="message-field">
-    <p id="lv-soc">LV SOC: </p>
+
+  <!-- LV Battery Section -->
+  <div class="section" id="lv-battery">
+    <div class="section-header">LV Battery</div>
+    <div class="message-field">
+      <p id="lv-voltage">LV Voltage: </p>
+    </div>
+    <div class="message-field">
+      <p id="lv-soc">LV SOC: </p>
+    </div>
   </div>
 </div>
 
