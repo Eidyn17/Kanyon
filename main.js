@@ -41,6 +41,14 @@ function publishMessage() {
           elementId = 'temperature';
           fieldLabel = 'Temperature';
           break;
+        case 'Kanyon/DC-DC_Status':
+          elementId = 'dc-dc_status';
+          fieldLabel = 'DC-DC Status';
+          break;
+        case 'Kanyon/Heater_Status':
+          elementId = 'heater_status';
+          fieldLabel = 'Battery Heater Status';
+          break;
         default:
           // Ignore other topics
           return;
@@ -73,7 +81,13 @@ function publishMessage() {
       var roundedValue = parseFloat(String.fromCharCode.apply(null, message)).toFixed(2);
   
       // Update the text content of the corresponding element
-      document.getElementById(elementId).textContent = fieldLabel + ': ' + roundedValue + units;
+        if (topic === 'Kanyon/DC-DC_Status' || topic === 'Kanyon/Heater_Status') {
+          document.getElementById(elementId).textContent = fieldLabel + ': ' + message.toString();
+        } else {
+          // For other topics, convert the message to a string and round to 2 decimal places
+          var roundedValue = parseFloat(String.fromCharCode.apply(null, message)).toFixed(2);
+          document.getElementById(elementId).textContent = fieldLabel + ': ' + roundedValue + units;
+        }
   
     }
   
@@ -96,6 +110,8 @@ function publishMessage() {
   client.subscribe('Kanyon/Temp');
   client.subscribe('Kanyon/LV_soc');
   client.subscribe('Kanyon/LV_Voltage');
+  client.subscribe('Kanyon/DC-DC_Status');
+  client.subscribe('Kanyon/Heater_Status');
   
   // Set up an interval to call the publishMessage function every 5 seconds (5000 milliseconds)
   setInterval(publishMessage, 5000);
