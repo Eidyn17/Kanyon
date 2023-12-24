@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,33 +12,65 @@
       font-family: 'Amazon Ember', sans-serif;
       background-color: #100030;
       color: white;
+      margin: 0; /* Remove default margin */
+    }
+
+    #header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: #1e1e1e;
+    }
+
+    #header img {
+      max-width: 100%;
+      height: auto;
     }
 
     .section {
-      margin-bottom: 20px; /* Add margin between sections for better visibility */
+      margin-bottom: 20px;
     }
 
     .section-header {
       font-size: 1.2em;
       font-weight: bold;
-      border: 2px solid #5a41fa; /* Set a solid border around the entire section header */
-      padding: 8px; /* Add padding to create some space between the text and the border */
-      border-radius: 8px; /* Add rounded edges to the border */
-      background-color: #5a41fa; /* Set background color to match the border */
-      color: #fff; /* Set text color to white for better visibility */
-      margin-top: 0; /* Remove default margin on the top of section header */
+      border: 2px solid #5a41fa;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: #5a41fa;
+      color: #fff;
+      margin-top: 0;
     }
 
     .message-field {
-      padding: 10px; /* Add padding for better visibility */
+      padding: 10px;
     }
 
     p {
-      margin: 0; /* Remove default paragraph margin */
+      margin: 0;
+    }
+
+    /* Additional styles for mobile optimization */
+    @media (max-width: 600px) {
+      #header {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #header img {
+        margin-bottom: 10px;
+      }
     }
   </style>
 </head>
 <body>
+
+<!-- Header with Images -->
+<div id="header">
+  <img src="/defender_front.png" alt="Defender Front Image">
+  <img src="/defender_side.png" alt="Defender Side Image">
+</div>
 
 <!-- Login Section -->
 <div id="login-section">
