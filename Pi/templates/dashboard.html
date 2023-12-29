@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanyon Dashboard</title>
+    <!-- Link to Amazon Ember font -->
+    <link rel="stylesheet" href="https://use.typekit.net/your-typekit-kit-id.css">
+    <style>
+        header {
+            display: flex;
+            justify-content: center; /* Center the content horizontally */
+            align-items: center; /* Align items vertically in the center */
+            margin-top: 1px;
+            margin-bottom: 1px;
+            background-color: #100030; /* Octopus Energy header background color */
+            padding: 2px;
+        }
+        
+        body {
+            font-family: 'Amazon Ember', 'Arial', sans-serif;
+            margin: 5px 20px 20px 20px;
+            background-color: #100030;
+            color: #fff; /* Default text color */
+            transition: background-color 0.5s, color 0.5s; /* Smooth transition for dark mode */
+            display: flex;
+            flex-direction: column; /* Elements arranged in a column by default */
+        }
+
+        header h1 {
+            font-family: 'Amazon Ember', sans-serif;
+            text-align: center;
+            color: #fff;
+        }
+
+        main {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        body.dark-mode section.dark-mode-content {
+            background-color: #333; /* Adjust to match your dark mode background color */
+            color: #fff; /* Adjust to match your dark mode text color */
+        }
+
+        section {
+            flex: 1;
+            margin: 10px;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+        }
+
+        #log_section {
+            order: 5; /* Set the order to 1 to move it below other sections */
+            flex-basis: 100%; /* Make log section take up the full width */
+        }
+
+        section h2 {
+            border: 2px solid #5a41fa; /* Set a solid border around the entire h2 */
+            padding: 8px; /* Add padding to create some space between the text and the border */
+            border-radius: 8px; /* Add rounded edges to the border */
+            background-color: #5a41fa; /* Set background color to match the border */
+            color: #fff; /* Set text color to white for better visibility */
+            margin-top: 0; /* Optional: Remove default margin on the top of h2 */
+        }
+
+        body.dark-mode section {
+            background-color: #333; /* Dark mode background color for sections */
+            color: #fff; /* Dark mode text color for sections */
+        }
+
+        .dark-mode-toggle-btn {
+            font-family: 'Amazon Ember', sans-serif;
+            font-size: 14px;
+            padding: 8px 12px;
+            margin-left: auto; /* Pushes the button to the right */
+            background-color: #5a41fa; /* Octopus Energy button background color */
+            color: #fff; /* Octopus Energy button text color */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .dark-mode-toggle-btn:hover {
+            background-color: #3498db; /* Lighter color on hover */
+        }
+
+        button {
+            font-family: 'Amazon Ember', sans-serif;
+            font-size: 14px;
+            padding: 8px 12px;
+            background-color: #5a41fa; /* Default background color */
+            color: #fff; /* Default text color */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Add a smooth transition effect on background color */
+        }
+
+        button:hover {
+            background-color: #3498db; /* Lighter background color on hover */
+        }
+
+        main {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        h1, h2, p {
+            color: inherit; /* Inherit text color from the parent (body) */
+        }
+
+        section p {
+            padding-left: 9px; /* Adjust the padding as needed */
+        }
+
+        #hv_battery, #lv_battery, #dcdc_converter, #charging_circuit, #log_section {
+            background-color: transparent; /* Remove background color */
+            border: none; /* Remove border */
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+
+        #log_content {
+            overflow-wrap: break-word;
+            max-width: 2000px; /* Adjust the value according to your preferred width */
+            white-space: pre-wrap; /* Preserve line breaks */
+        }
+
+/* Optional: Adjust the button styles if needed */
+#log_section button {
+    margin-right: 10px;
+}
+
+
+        #temp_C {
+            margin: 8px 0;
+            font-weight: bold;
+        }
+
+        #temp_C.red {
+            color: #FF7575;
+        }
+
+        #temp_C.green {
+            color: green;
+        }
+
+        #temp_C.blue {
+            color: #75A3FF;
+        }
+
+        #uptime {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Media query for small screens */
+        @media (max-width: 600px) {
+            main {
+                flex-direction: column; /* Change to a single column layout */
+            }
+
+            section {
+                width: 95%; /* Make each section take up the full width */
+                margin: 10px 0; /* Adjust margin as needed */
+            }
+        }
+    </style>
+    <script>
+
+        function refreshData() {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    // Update DC-DC Converter section
+                    const statusElement = document.getElementById('status_value');
+                    statusElement.innerText = data.gpio_status;
+
+                    // Update HV Battery section
+                    const roundedVoltage = parseFloat(data.hv_voltage).toFixed(3);
+                    document.getElementById('hv_voltage').innerText = `HV Battery Voltage: ${roundedVoltage} V`;
+
+                    // Update Contactor field
+                    document.getElementById('contactor_state').innerText = `Contactor: ${data.contactor_state}`;
+
+                    // Update HV Cond Req
+                    document.getElementById('hv_cond_req').innerText = `HV Conditioning Req: ${data.hv_cond_req}`;
+
+                    // Update HV Battery SoC
+                    document.getElementById('hv_soc').innerText = `HV SoC: ${data.hv_soc.toFixed(2)}%`;
+
+                    // Update Temperature Section with Colour Coding
+                    const tempElement = document.getElementById('temp_C');
+                    const originalTemperature = parseFloat(data.temp_C);
+                    const roundedTemperature = originalTemperature.toFixed(3);
+
+                    tempElement.innerText = `Temperature: ${roundedTemperature} °C`;
+
+                    // Remove previous color coding classes
+                    tempElement.classList.remove('red', 'green', 'blue');
+
+                    // Color coding based on temperature range using the original temperature value
+                    if (originalTemperature > 25) {
+                        tempElement.classList.add('red');
+                    } else if (originalTemperature >= 15 && originalTemperature <= 25) {
+                        tempElement.classList.add('green');
+                    } else {
+                        tempElement.classList.add('blue');
+                    }
+
+                    document.getElementById('hv_current').innerText = `DC-DC Input Current: ${data.hv_current} mA`;
+                    document.getElementById('hv_power').innerText = `DC-DC Power: ${data.hv_power} mW`;
+
+                    const cumulativeEnergyElement = document.getElementById('cumulative_energy_consumption');
+                    cumulativeEnergyElement.innerText = `Energy Consumption: ${data.cumulative_energy_consumption.toFixed(3)} Wh`;
+
+                    // Update LV Battery section
+                    document.getElementById('lv_voltage').innerText = `LV Battery Voltage: ${data.lv_voltage} mV`;
+                    document.getElementById('lv_soc').innerText = `LV Battery SoC: ${data.lv_soc.toFixed(2)}%`;
+
+                    // Check and play/stop the low voltage alert sound
+                    if (data.very_low_voltage_logged) {
+                        document.getElementById('lowVoltageSound').play();
+                    } else {
+                        document.getElementById('lowVoltageSound').pause();
+                        document.getElementById('lowVoltageSound').currentTime = 0;  // Reset the audio to the beginning
+                    }
+                });
+        }
+
+        function refreshLog() {
+            fetch('/log')
+                .then(response => response.text())
+                .then(data => {
+                    // Split the log entries into an array
+                    const logEntries = data.split('\n');
+
+                    // Reverse the array to have the most recent entries first
+                    logEntries.reverse();
+
+                    // Join the array back into a string with line breaks
+                    const reversedLog = logEntries.join('\n');
+
+                    // Update the log content with the reversed log
+                    document.getElementById('log_content').innerHTML = reversedLog;
+                });
+        }
+
+        // Clear Log function
+        function clearLog() {
+            fetch('/clear_log', {
+                method: 'POST'  // Use POST method
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // If the log is cleared successfully, refresh the log content
+                    if (data.success) {
+                        refreshLog();
+                    } else {
+                        console.error('Failed to clear log.');
+                    }
+                });
+        }
+
+        // Toggle Dark Mode
+        function toggleDarkMode() {
+            const body = document.body;
+            const logContent = document.getElementById('log_content');
+
+            body.classList.toggle('dark-mode');
+            logContent.classList.toggle('dark-mode-content', body.classList.contains('dark-mode'));
+        }
+
+
+        // Toggle DC-DC Converter
+        function toggleGpio27() {
+            // Display a confirmation dialog
+            const userConfirmation = window.confirm("Are you sure you want to toggle the DC-DC Converter?");
+
+            // Check if the user confirmed
+            if (userConfirmation) {
+                console.log("Toggle button clicked");
+
+                // Proceed with the toggle request
+                fetch('/toggle_gpio_27', {
+                    method: 'POST',  // Use POST method
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const statusElement = document.getElementById('status_value');
+                    statusElement.innerText = data.gpio_status;
+
+                    // Update the button text based on the new GPIO status
+                    const toggleButton = document.getElementById('toggle_button');
+                    toggleButton.innerText = data.gpio_status === 'Active' ? 'Disable' : 'Enable';
+                });
+            } else {
+                // User canceled, do nothing
+                console.log("Toggle canceled by the user");
+            }
+        }
+
+        function toggleBatteryHeater() {
+            // Display a confirmation dialog
+            const userConfirmation = window.confirm("Are you sure you want to toggle the Battery Heater?");
+
+            // Check if the user confirmed
+            if (userConfirmation) {
+                console.log("Toggle Battery Heater button clicked");
+
+                // Proceed with the toggle request
+                fetch('/toggle_gpio_26', {
+                    method: 'POST',  // Use POST method
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const heaterStatusElement = document.getElementById('heater_status_value');
+                    heaterStatusElement.innerText = data.gpio_26_status === 'High' ? 'ON' : 'OFF';
+                });
+            } else {
+                // User canceled, do nothing
+                console.log("Toggle Battery Heater canceled by the user");
+            }
+        }
+
+
+        function refreshBatteryHeaterStatus() {
+            fetch('/check_gpio_26_status')
+                .then(response => response.json())
+                .then(data => {
+                    const heaterStatusElement = document.getElementById('heater_status_value');
+                    heaterStatusElement.innerText = data.gpio_26_status === 'High' ? 'ON' : 'OFF';
+                });
+        }
+
+        function resetEnergyConsumption() {
+            const resetConfirmation = window.confirm("Are you sure you want to reset the energy consumption?");
+    
+            if (resetConfirmation) {
+                // Perform the reset action
+                fetch('/reset_energy_consumption', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // If the reset is successful, update the UI and log
+                        const cumulativeEnergyElement = document.getElementById('cumulative_energy_consumption');
+                        cumulativeEnergyElement.innerText = `Energy Consumption: 0.000 Wh`;
+
+                        // Log the reset
+                        logMessage("Energy consumption reset to 0.");
+                    } else {
+                        console.error('Failed to reset energy consumption.');
+                    }
+                });
+            }
+        }
+
+        function refreshChargingCircuit() {
+            fetch('/charging_data')
+                .then(response => response.json())
+                .then(data => {
+                    // Update Is Charging field
+                    const isChargingElement = document.getElementById('is_charging');
+                    isChargingElement.innerText = `Is Charging?: ${data.is_charging === 'Yes' ? 'Yes' : (data.is_charging === 'No' ? 'No' : 'Unknown')}`;
+
+                    // Update Charging Current field
+                    document.getElementById('charging_current').innerText = `Charging Current: ${data.charging_current} mA`;
+
+                    // Update Charging Power field
+                    document.getElementById('charging_power').innerText = `Charging Power: ${data.charging_power} mW`;
+                });
+        }
+        
+        // Refresh charging circuit data every 2 seconds
+        setInterval(refreshChargingCircuit, 2000);
+
+        // Refresh battery heater status every 2 seconds
+        setInterval(refreshBatteryHeaterStatus, 2000);
+
+
+        // Refresh data every second
+        setInterval(refreshData, 1000);
+
+        // Refresh log every 5 seconds
+        setInterval(refreshLog, 5000);
+
+    </script>
+
+</head>
+
+<body>
+    <header>
+        <h1>
+            <img src="static/defender_side.png" alt="Defender Side Image" style="width: 40%;">
+            <img src="static/defender_front.png" alt="Defender Front Image" style="width: 19%;">
+        </h1>
+        <!-- Dark Mode Toggle Button -->
+        <!-- <button onclick="toggleDarkMode()" class="dark-mode-toggle-btn">Toggle Dark Mode</button> -->
+    </header>
+<main>
+    <section id="hv_battery">
+        <h2>HV Battery</h2>
+        <p id="hv_soc">HV SoC: {{ hv_soc }}%</p>
+        <p id="hv_voltage">HV Battery Voltage: {{ hv_voltage }} V</p>
+        <p id="contactor_state">Contactor: {{ contactor_state }}</p>
+        <p id="chemistry">Chemistry: {{ battery_chemistry }}</p>
+        <p id="temp_C">Temperature: {{ temp_C }} °C</p>
+        <p id="hv_cond_req">HV Conditioning Req: {{ hv_cond_req }}</p>
+        <p id="battery_heater_status">Battery Heater: <span id="heater_status_value">{{ 'ON' if battery_heater_state else 'OFF' }}</span></p>
+        <!-- Button to toggle Battery Heater state -->
+        <button id="toggle_heater_button" onclick="toggleBatteryHeater()">Toggle Battery Heater</button> 
+    </section>
+
+    <section id="dcdc_converter">
+        <h2>DC-DC Converter</h2>
+        <p id="status">Status: <span id="status_value">Active</span></p>
+        <p id="hv_current">DC-DC Input Current: {{ hv_current }} mA</p>
+        <p id="hv_power">DC-DC Power: {{ hv_power }} mW</p>
+
+        <!-- Button to toggle GPIO 27 state -->
+        <button id="toggle_button" onclick="toggleGpio27()">Toggle DC-DC Converter</button>
+
+        <p id="cumulative_energy_consumption">Energy Consumption: {{ cumulative_energy_consumption }} Wh</p>
+
+        <button onclick="resetEnergyConsumption()">Reset Energy Consumption</button>
+    </section>
+
+    <section id="lv_battery">
+        <h2>LV Battery</h2>
+        <p id="lv_voltage">LV Battery Voltage: {{ lv_voltage }} mV</p>
+        <p id="lv_soc">LV Battery SoC: {{ lv_soc }}%</p>
+    </section>
+
+    <section id="charging_circuit">
+        <h2>Charging Circuit</h2>
+        <p id="is_charging">Is Charging?: {{ is_charging }}</p>
+        <p id="charging_current">Charging Current: {{ charging_current }} mA</p>
+        <p id="charging_power">Charging Power: {{charging_power}} mW</p>
+    </section>
+
+    <section id="log_section">
+        <h2>Log</h2>
+        <button onclick="refreshLog()">Refresh Log</button>
+        <button onclick="clearLog()">Clear Log</button>
+        <pre id="log_content"></pre>
+    </section>
+
+</main>
+
+    <!-- Audio element for low voltage alert sound -->
+    <audio id="lowVoltageSound" loop>
+        <source src="/static/alert.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+</body>
+
+</html>
