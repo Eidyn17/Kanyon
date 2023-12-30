@@ -68,7 +68,7 @@ function publishMessage() {
 
     // Update last update time
     lastUpdateTime = new Date().toLocaleString();
-    document.getElementById('last-update-section').textContent = 'Last update received: ' + lastUpdateTime;
+    document.getElementById('last-update').textContent = 'Last update received: ' + lastUpdateTime;
   }
 
     // Append units based on the topic
