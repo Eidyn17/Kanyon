@@ -1,8 +1,14 @@
-// Function to publish a message every 5 seconds
+// Function to publish a message every 5 seconds with a message expiry of 10 seconds
 function publishMessage() {
   if (navigator.onLine) {
     if (client) {
-      client.publish('Kanyon/mqtt_request', '1');
+      const messageOptions = {
+        properties: {
+          messageExpiryInterval: 10, // Expiry time in seconds
+        },
+      };
+
+      client.publish('Kanyon/mqtt_request', '1', messageOptions);
       console.log('MQTT Request Sent.');
     }
   } else {
