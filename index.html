@@ -187,6 +187,7 @@ function attemptLogin() {
     port: 8884,
     path: '/mqtt',
     clean: true,
+    protocolVersion: 5, // Set to 5 for MQTT version 5
   };
 
   // Create a new MQTT client
