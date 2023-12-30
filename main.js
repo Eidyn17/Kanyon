@@ -16,6 +16,9 @@ function publishMessage() {
   }
 }
 
+  // Variable to store the last update time
+  let lastUpdateTime = '';  
+
   // Function to update the message display
   function updateMessageDisplay(topic, message) {
     // Get the corresponding element based on the topic
@@ -62,7 +65,11 @@ function publishMessage() {
       default:
         // Ignore other topics
         return;
-    }
+
+    // Update last update time
+    lastUpdateTime = new Date().toLocaleString();
+    document.getElementById('last-update').textContent = 'Last update received: ' + lastUpdateTime;
+  }
 
     // Append units based on the topic
     var units = '';
