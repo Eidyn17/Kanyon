@@ -100,25 +100,13 @@ function publishMessage() {
         break;
     }
 
-    // Handle message conversion: check if it's an ArrayBuffer, else treat as string
-    let displayMessage;
-    if (message instanceof ArrayBuffer) {
-      displayMessage = String.fromCharCode.apply(null, new Uint8Array(message));
-    } else {
-      displayMessage = message.toString();
-    }
-
     // For topics with numeric values, round them to 2 decimal places
-    if (topic !== 'Kanyon/log' && topic !== 'Kanyon/DC-DC_Status' && topic !== 'Kanyon/Heater_Status') {
-      let roundedValue = parseFloat(displayMessage).toFixed(2);
+    if (topic !== 'Kanyon/log') {
+      var roundedValue = parseFloat(String.fromCharCode.apply(null, message)).toFixed(2);
       document.getElementById(elementId).textContent = fieldLabel + ': ' + roundedValue + units;
-    } else if (topic === 'Kanyon/DC-DC_Status' || topic === 'Kanyon/Heater_Status') {
-      // Handle ON/OFF messages for these topics
-      let statusMessage = (displayMessage === 'ON') ? 'ON' : 'OFF';
-      document.getElementById(elementId).textContent = fieldLabel + ': ' + statusMessage;
     } else {
-      // For 'Kanyon/log', just display the message as-is
-      document.getElementById(elementId).textContent = fieldLabel + ': ' + displayMessage;
+      // For 'Kanyon/log', just display the message as-is (string content)
+      document.getElementById(elementId).textContent = fieldLabel + ': ' + String.fromCharCode.apply(null, message);
     }
   }
 
