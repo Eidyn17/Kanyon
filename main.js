@@ -62,6 +62,10 @@ function publishMessage() {
         elementId = 'heater_status';
         fieldLabel = 'Battery Heater Status';
         break;
+      case 'Kanyon/log':
+        elementId = 'log-content'; // The id of the "Log" section
+        fieldLabel = 'Log'; // Label for the new section
+        break;
       default:
         // Ignore other topics
         return;
@@ -96,18 +100,14 @@ function publishMessage() {
         break;
     }
 
-    // Convert the message to a string and round to 2 decimal places
-    var roundedValue = parseFloat(String.fromCharCode.apply(null, message)).toFixed(2);
-
-    // Update the text content of the corresponding element
-      if (topic === 'Kanyon/DC-DC_Status' || topic === 'Kanyon/Heater_Status') {
-        document.getElementById(elementId).textContent = fieldLabel + ': ' + message.toString();
-      } else {
-        // For other topics, convert the message to a string and round to 2 decimal places
-        var roundedValue = parseFloat(String.fromCharCode.apply(null, message)).toFixed(2);
-        document.getElementById(elementId).textContent = fieldLabel + ': ' + roundedValue + units;
-      }
-
+    // For topics with numeric values, round them to 2 decimal places
+    if (topic !== 'Kanyon/log') {
+      var roundedValue = parseFloat(String.fromCharCode.apply(null, message)).toFixed(2);
+      document.getElementById(elementId).textContent = fieldLabel + ': ' + roundedValue + units;
+    } else {
+      // For 'Kanyon/log', just display the message as-is (string content)
+      document.getElementById(elementId).textContent = fieldLabel + ': ' + String.fromCharCode.apply(null, message);
+    }
   }
 
 // prints a received message
@@ -132,6 +132,7 @@ client.subscribe('Kanyon/LV_soc');
 client.subscribe('Kanyon/LV_Voltage');
 client.subscribe('Kanyon/DC-DC_Status');
 client.subscribe('Kanyon/Heater_Status');
+client.subscribe('Kanyon/log');
 
 // Set up an interval to call the publishMessage function every 5 seconds (5000 milliseconds)
 setInterval(publishMessage, 5000);
