@@ -100,13 +100,14 @@ function publishMessage() {
         break;
     }
 
-    // For topics with numeric values, round them to 2 decimal places
-    if (topic !== 'Kanyon/log') {
+    // For topics with string values (like DC-DC Status, Heater Status, and Log)
+    if (topic === 'Kanyon/DC-DC_Status' || topic === 'Kanyon/Heater_Status' || topic === 'Kanyon/log') {
+      // Directly display the string content
+      document.getElementById(elementId).textContent = fieldLabel + ': ' + String.fromCharCode.apply(null, message);
+    } else {
+      // For numeric topics, round them to 2 decimal places
       var roundedValue = parseFloat(String.fromCharCode.apply(null, message)).toFixed(2);
       document.getElementById(elementId).textContent = fieldLabel + ': ' + roundedValue + units;
-    } else {
-      // For 'Kanyon/log', just display the message as-is (string content)
-      document.getElementById(elementId).textContent = fieldLabel + ': ' + String.fromCharCode.apply(null, message);
     }
   }
 
