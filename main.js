@@ -100,13 +100,21 @@ function publishMessage() {
         break;
     }
 
+    // Convert message based on its type (if byte array, convert to string)
+    let displayMessage;
+    if (Buffer.isBuffer(message)) {
+      displayMessage = String.fromCharCode.apply(null, message);
+    } else {
+      displayMessage = message.toString();
+    }
+
     // For topics with numeric values, round them to 2 decimal places
     if (topic !== 'Kanyon/log') {
-      var roundedValue = parseFloat(String.fromCharCode.apply(null, message)).toFixed(2);
+      let roundedValue = parseFloat(displayMessage).toFixed(2);
       document.getElementById(elementId).textContent = fieldLabel + ': ' + roundedValue + units;
     } else {
-      // For 'Kanyon/log', just display the message as-is (string content)
-      document.getElementById(elementId).textContent = fieldLabel + ': ' + String.fromCharCode.apply(null, message);
+      // For 'Kanyon/log', just display the message as-is
+      document.getElementById(elementId).textContent = fieldLabel + ': ' + displayMessage;
     }
   }
 
