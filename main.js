@@ -100,10 +100,13 @@ function publishMessage() {
         break;
     }
 
-    // Convert message to string (if it's a buffer)
-    let displayMessage = (message instanceof ArrayBuffer) 
-      ? String.fromCharCode.apply(null, new Uint8Array(message)) 
-      : message.toString();
+    // Handle message conversion: check if it's an ArrayBuffer, else treat as string
+    let displayMessage;
+    if (message instanceof ArrayBuffer) {
+      displayMessage = String.fromCharCode.apply(null, new Uint8Array(message));
+    } else {
+      displayMessage = message.toString();
+    }
 
     // For topics with numeric values, round them to 2 decimal places
     if (topic !== 'Kanyon/log' && topic !== 'Kanyon/DC-DC_Status' && topic !== 'Kanyon/Heater_Status') {
