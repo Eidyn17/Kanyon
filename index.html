@@ -4,9 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kanyon MQTT</title>
-  <link rel="icon" type="image/x-icon" href="favicon-96x96.ico">
-  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <title>Welcome</title>
   <style>
     body {
       font-family: 'Amazon Ember', sans-serif;
@@ -14,206 +12,39 @@
       color: white;
       margin: 0;
       display: flex;
-      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
 
-    #header {
-      text-align: center;
-      padding: 10px 10px 0;
-      background-color: #100030;
-      margin-bottom: 0;
-    }
-
-    #header img {
-      max-width: 100%;
-      height: auto;
-      margin: 10px auto;
-      display: block;
-    }
-
-    #header img#defender_front {
-      width: 16%;
-    }
-
-    .sections-container {
+    .tile {
+      width: 200px;
+      height: 100px;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      align-items: flex-start;
-      align-self: flex-start;
-      width: 96%;
-    }
-
-    .section {
-      margin-bottom: 20px;
-      width: 30%;
-      min-width: 200px;
-      padding: 10px;
-    }
-
-    .section-header {
+      align-items: center;
+      justify-content: center;
+      background-color: #5a41fa;
+      color: white;
       font-size: 1.2em;
       font-weight: bold;
-      border: 2px solid #5a41fa;
-      padding: 8px;
       border-radius: 8px;
-      background-color: #5a41fa;
-      color: #fff;
-      margin-top: 0;
-      padding-right: 15px;
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
-    }
-
-    .message-field {
-      padding: 10px;
-    }
-
-    p {
-      margin: 0;
-    }
-
-    #simple-view {
-      display: none;
+      cursor: pointer;
       text-align: center;
-      margin-top: 20px;
     }
 
-    #simple-view p {
-      font-size: 2em;
-      margin: 10px 0;
-    }
-
-    #simple-view .icon {
-      font-size: 3em;
-      margin-right: 10px;
-    }
-
-    /* Additional styles for mobile optimization */
-    @media (max-width: 600px) {
-      .sections-container {
-        flex-direction: column;
-      }
-
-      #header img {
-        margin-bottom: 10px;
-      }
-
-      .section {
-        width: 100%;
-      }
-
-      .section-header {
-        padding-right: 10px;
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-      }
+    .tile:hover {
+      background-color: #4631d3;
     }
   </style>
 </head>
 
 <body>
-  <!-- Toggle Button -->
-  <button id="toggle-view" onclick="toggleView()" title="Switch View"
-    style="position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer;">
-    <img id="toggle-icon" src="static/data-icon.png" alt="Toggle View" style="width: 30px; height: 30px;">
-  </button>
-
-  <!-- Header and Data View -->
-  <div id="header">
-    <img id="defender_front" src="static/defender_front.png" alt="Defender Front Image">
-  </div>
-  <div id="data-view" class="sections-container">
-    <!-- Login Section -->
-    <div id="login-section" class="section">
-      <div class="section-header">Login</div>
-      <form id="login-form" onsubmit="attemptLogin(); return false;">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <button type="submit">Login</button>
-      </form>
-    </div>
-
-    <!-- HV Battery Section -->
-    <div class="section" id="hv-battery">
-      <div class="section-header">HV Battery</div>
-      <div class="message-field">
-        <p id="hv-soc">HV SoC: --%</p>
-      </div>
-      <div class="message-field">
-        <p id="hv-voltage">HV Voltage: --V</p>
-      </div>
-      <div class="message-field">
-        <p id="temperature">Temperature: --°C</p>
-      </div>
-      <div class="message-field">
-        <p id="heater_status">Battery Heater Status: off</p>
-      </div>
-    </div>
-
-    <!-- LV Battery Section -->
-    <div class="section" id="lv-battery">
-      <div class="section-header">LV Battery</div>
-      <div class="message-field">
-        <p id="lv-voltage">LV Voltage: --V</p>
-      </div>
-      <div class="message-field">
-        <p id="lv-soc">LV SOC: --%</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Simple View -->
-  <div id="simple-view">
-    <p><span class="icon">🔋</span><span id="simple-hv-soc">--%</span></p>
-    <p><span class="icon">⚡</span><span id="simple-hv-voltage">--V</span></p>
-    <p><span class="icon">🌡️</span><span id="simple-temperature">--°C</span></p>
-    <p><span id="simple-heater-icon" class="icon" style="color: white;">〰️</span></p>
-  </div>
+  <div class="tile" onclick="navigateTo('./kanyon.html')">Kanyon</div>
 
   <script>
-    // Ensure simple-view is hidden when the page loads
-    document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById('simple-view').style.display = 'none';
-    });
-
-    // Toggle view logic
-    function toggleView() {
-      const dataView = document.getElementById('data-view');
-      const simpleView = document.getElementById('simple-view');
-      const toggleIcon = document.getElementById('toggle-icon');
-
-      if (dataView.style.display === 'none') {
-        dataView.style.display = 'flex';
-        simpleView.style.display = 'none';
-        toggleIcon.src = 'static/data-icon.png';
-      } else {
-        dataView.style.display = 'none';
-        simpleView.style.display = 'flex';
-        toggleIcon.src = 'static/simple-icon.png';
-        updateSimpleView();
-      }
-    }
-
-    // Update simple-view values
-    function updateSimpleView() {
-      const hvSoc = document.getElementById('hv-soc').textContent.split(': ')[1] || '--%';
-      document.getElementById('simple-hv-soc').textContent = hvSoc;
-
-      const hvVoltage = document.getElementById('hv-voltage').textContent.split(': ')[1] || '--V';
-      document.getElementById('simple-hv-voltage').textContent = hvVoltage;
-
-      const temperature = document.getElementById('temperature').textContent.split(': ')[1] || '--°C';
-      document.getElementById('simple-temperature').textContent = temperature;
-
-      const heaterStatus = document.getElementById('heater_status').textContent.split(': ')[1] || 'off';
-      const heaterIcon = document.getElementById('simple-heater-icon');
-      heaterIcon.style.color = heaterStatus.trim().toLowerCase() === 'on' ? 'red' : 'white';
+    // Function to navigate to the selected project
+    function navigateTo(url) {
+      window.location.href = url;
     }
   </script>
 </body>
