@@ -12,43 +12,43 @@
       font-family: 'Amazon Ember', sans-serif;
       background-color: #100030;
       color: white;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin: 0; /* Remove default margin */
+      display: flex; /* Use flexbox for the body */
+      flex-direction: column; /* Stack children vertically */
+      align-items: center; /* Center children horizontally */
     }
 
     #header {
-      text-align: center;
-      padding: 10px 10px 0;
-      background-color: #100030;
-      margin-bottom: 0;
+      text-align: center; /* Center the children horizontally */
+      padding: 10px 10px 0; /* Set top and right padding to 10px, bottom padding to 0 */
+      background-color: #100030; /* Set the background color to match the body */
+      margin-bottom: 0; /* Set the margin bottom to 0 */
     }
 
     #header img {
       max-width: 100%;
       height: auto;
-      margin: 10px auto;
-      display: block;
+      margin: 10px auto; /* Center the image horizontally with a top margin of 10px */
+      display: block; /* Make the image a block element */
     }
 
     #header img#defender_front {
-      width: 16%;
+      width: 16%; /* Set the default width to 16% for defender_front image */
     }
 
     .sections-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      align-items: flex-start;
-      align-self: flex-start;
+      display: flex; /* Use flexbox for the sections container */
+      flex-wrap: wrap; /* Allow items to wrap onto the next line */
+      justify-content: flex-start; /* Left-align items */
+      align-items: flex-start; /* Left-align items */
+      align-self: flex-start; /* Left-align the container itself */
       width: 96%;
     }
-
+ 
     .section {
       margin-bottom: 20px;
-      width: 30%;
-      min-width: 200px;
+      width: 30%; /* Set the width of each section */
+      min-width: 200px; /* Set a minimum width to prevent too narrow sections */
       padding: 10px;
     }
 
@@ -61,6 +61,7 @@
       background-color: #5a41fa;
       color: #fff;
       margin-top: 0;
+      /* Add padding and border-radius to the right side */
       padding-right: 15px;
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
@@ -74,29 +75,10 @@
       margin: 0;
     }
 
-    #simple-view {
-      display: none;
-      text-align: center;
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column; /* Make the layout a vertical stack */
-      align-items: center; /* Center the content horizontally */
-    }
-
-    #simple-view p {
-      font-size: 2em;
-      margin: 10px 0;
-    }
-
-    #simple-view .icon {
-      font-size: 3em;
-      margin-right: 10px;
-    }
-
     /* Additional styles for mobile optimization */
     @media (max-width: 600px) {
       .sections-container {
-        flex-direction: column;
+        flex-direction: column; /* Stack sections vertically on narrow screens */
       }
 
       #header img {
@@ -104,122 +86,156 @@
       }
 
       .section {
-        width: 100%;
+        width: 100%; /* Set the width to 100% on narrow screens */
       }
 
+      /* Adjust section header styles for smaller screens */
       .section-header {
-        padding-right: 10px;
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
+        padding-right: 10px; /* Adjust padding for smaller screens */
+        border-top-right-radius: 8px; /* Adjust border-radius for smaller screens */
+        border-bottom-right-radius: 8px; /* Adjust border-radius for smaller screens */
       }
     }
   </style>
 </head>
-
 <body>
-  <!-- Toggle Button -->
-  <button id="toggle-view" onclick="toggleView()" title="Switch View"
-    style="position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer;">
-    <img id="toggle-icon" src="static/data-icon.png" alt="Toggle View" style="width: 30px; height: 30px;">
-  </button>
 
-  <!-- Header and Data View -->
-  <div id="header">
-    <img id="defender_front" src="static/defender_front.png" alt="Defender Front Image">
+<!-- Header with Images -->
+<div id="header">
+  <img id="defender_front" src="static/defender_front.png" alt="Defender Front Image">
+</div>
+
+<!-- Sections Container -->
+<div class="sections-container">
+
+  <!-- Login Section -->
+  <div id="login-section" class="section">
+    <div class="section-header">Login</div>
+    <form id="login-form" onsubmit="attemptLogin(); return false;">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      <br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <br>
+      <button type="submit">Login</button>
+    </form>
   </div>
-  <div id="data-view" class="sections-container">
-    <!-- Login Section -->
-    <div id="login-section" class="section">
-      <div class="section-header">Login</div>
-      <form id="login-form" onsubmit="attemptLogin(); return false;">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <button type="submit">Login</button>
-      </form>
-    </div>
 
-    <!-- HV Battery Section -->
-    <div class="section" id="hv-battery">
-      <div class="section-header">HV Battery</div>
-      <div class="message-field">
-        <p id="hv-soc">HV SoC: --%</p>
-      </div>
-      <div class="message-field">
-        <p id="hv-voltage">HV Voltage: --V</p>
-      </div>
-      <div class="message-field">
-        <p id="temperature">Temperature: --°C</p>
-      </div>
-      <div class="message-field">
-        <p id="heater_status">Battery Heater Status: off</p>
-      </div>
+  <!-- HV Battery Section -->
+  <div class="section" id="hv-battery">
+    <div class="section-header">HV Battery</div>
+    <div class="message-field">
+      <p id="hv-soc">HV SoC: </p>
     </div>
-
-    <!-- LV Battery Section -->
-    <div class="section" id="lv-battery">
-      <div class="section-header">LV Battery</div>
-      <div class="message-field">
-        <p id="lv-voltage">LV Voltage: --V</p>
-      </div>
-      <div class="message-field">
-        <p id="lv-soc">LV SOC: --%</p>
-      </div>
+    <div class="message-field">
+      <p id="hv-voltage">HV Voltage: </p>
+    </div>
+    <div class="message-field">
+      <p id="temperature">Temperature: </p>
+    </div>
+    <div class="message-field">
+      <p id="heater_status">Battery Heater Status: </p>
     </div>
   </div>
 
-  <!-- Simple View -->
-  <div id="simple-view">
-    <p><span class="icon">🔋</span><span id="simple-hv-soc">--%</span></p>
-    <p><span class="icon">⚡</span><span id="simple-hv-voltage">--V</span></p>
-    <p><span class="icon">🌡️</span><span id="simple-temperature">--°C</span></p>
-    <p><span id="simple-heater-icon" class="icon" style="color: white;">〰️</span></p>
+  <!-- LV Battery Section -->
+  <div class="section" id="lv-battery">
+    <div class="section-header">LV Battery</div>
+    <div class="message-field">
+      <p id="lv-voltage">LV Voltage: </p>
+    </div>
+    <div class="message-field">
+      <p id="lv-soc">LV SOC: </p>
+    </div>
   </div>
 
-  <script>
-    // Ensure simple-view is hidden when the page loads
-    document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById('data-view').style.display = 'flex'; // Show data view initially
-      document.getElementById('simple-view').style.display = 'none'; // Hide simple view initially
-    });
+  <!-- DC-DC Converter Section -->
+  <div class="section" id="dc-dc-converter">
+    <div class="section-header">DC-DC Converter</div>
+    <div class="message-field">
+      <p id="dc-dc_status">DC-DC Status: </p>
+    </div>
+    <div class="message-field">
+      <p id="dc-dc_current">DC-DC Current: </p>
+    </div>
+    <div class="message-field">
+      <p id="dc-dc_power">DC-DC Power: </p>
+    </div>
+  </div>
 
-    // Toggle view logic
-    function toggleView() {
-      const dataView = document.getElementById('data-view');
-      const simpleView = document.getElementById('simple-view');
-      const toggleIcon = document.getElementById('toggle-icon');
+  <!-- Log Section -->
+  <div class="section" id="log-section">
+    <div class="section-header">Log</div>
+    <div class="message-field">
+      <p id="log-content">Last 5 messages: </p>
+    </div>
+  </div>
 
-      if (dataView.style.display === 'none') {
-        dataView.style.display = 'flex';
-        simpleView.style.display = 'none';
-        toggleIcon.src = 'static/data-icon.png';
-      } else {
-        dataView.style.display = 'none';
-        simpleView.style.display = 'flex';
-        toggleIcon.src = 'static/simple-icon.png';
-        updateSimpleView();
-      }
-    }
+  <!-- Last Update Section -->
+  <div class="section" id="last-update-section">
+    <div class="message-field">
+      <p id="last-update">Last update received: </p>
+    </div>
+  </div>
+</div>
 
-    // Update simple-view values
-    function updateSimpleView() {
-      const hvSoc = document.getElementById('hv-soc').textContent.split(': ')[1] || '--%';
-      document.getElementById('simple-hv-soc').textContent = hvSoc;
+<script>
 
-      const hvVoltage = document.getElementById('hv-voltage').textContent.split(': ')[1] || '--V';
-      document.getElementById('simple-hv-voltage').textContent = hvVoltage;
+let client;
 
-      const temperature = document.getElementById('temperature').textContent.split(': ')[1] || '--°C';
-      document.getElementById('simple-temperature').textContent = temperature;
+// Function to attempt login
+function attemptLogin() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
-      const heaterStatus = document.getElementById('heater_status').textContent.split(': ')[1] || 'off';
-      const heaterIcon = document.getElementById('simple-heater-icon');
-      heaterIcon.style.color = heaterStatus.trim().toLowerCase() === 'on' ? 'red' : 'white';
-    }
-  </script>
+  // Close the existing client if it exists
+  if (client) {
+    client.end();
+  }
+
+  // Use the entered username and password in MQTT connection options
+  const options = {
+    username: username,
+    password: password,
+    protocol: 'wss',
+    port: 8884,
+    path: '/mqtt',
+    clean: true,
+    protocolVersion: 5, // Set to 5 for MQTT version 5
+  };
+
+  // Create a new MQTT client
+  client = mqtt.connect('tls://95ea70d6edb34e4a956c8f346ae8fba8.s1.eu.hivemq.cloud:8884', options);
+
+  // MQTT connection callback
+  client.on('connect', () => {
+    console.log('Connected!');
+    // Hide the login section and allow the main script to proceed
+    document.getElementById('login-section').style.display = 'none';
+    runMainScript();
+  });
+
+  // MQTT connection error callback
+  client.on('error', (error) => {
+    console.error('Connection failed:', error);
+    // Display an error message or take appropriate action
+
+    // Close the client to prevent automatic reconnection attempts
+    client.end();
+  });
+}
+
+// Function to run main.js after successful login
+function runMainScript(username, password, client) {
+  // Include main.js script dynamically
+  var script = document.createElement('script');
+  script.src = 'main.js';
+  document.head.appendChild(script);
+
+}
+
+</script>
+
 </body>
-
 </html>
