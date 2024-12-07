@@ -78,9 +78,6 @@
       display: none;
       text-align: center;
       margin-top: 20px;
-      display: flex;
-      flex-direction: column; /* Make the layout a vertical stack */
-      align-items: center; /* Center the content horizontally */
     }
 
     #simple-view p {
@@ -182,8 +179,7 @@
   <script>
     // Ensure simple-view is hidden when the page loads
     document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById('data-view').style.display = 'flex'; // Show data view initially
-      document.getElementById('simple-view').style.display = 'none'; // Hide simple view initially
+      document.getElementById('simple-view').style.display = 'none';
     });
 
     // Toggle view logic
