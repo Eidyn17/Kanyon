@@ -77,12 +77,17 @@
     #simple-view {
       display: none;
       text-align: center;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
+      margin-top: 20px;
+    }
+
+    #simple-view p {
+      font-size: 2em;
+      margin: 10px 0;
+    }
+
+    #simple-view .icon {
+      font-size: 3em;
+      margin-right: 10px;
     }
 
     /* Additional styles for mobile optimization */
@@ -101,6 +106,8 @@
 
       .section-header {
         padding-right: 10px;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
       }
     }
   </style>
@@ -108,17 +115,17 @@
 
 <body>
   <!-- Toggle Button -->
-  <button id="toggle-view" onclick="toggleView()" title="Switch View" style="position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer;">
+  <button id="toggle-view" onclick="toggleView()" title="Switch View"
+    style="position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer;">
     <img id="toggle-icon" src="static/data-icon.png" alt="Toggle View" style="width: 30px; height: 30px;">
   </button>
 
-  <!-- Header with Images -->
+  <!-- Header and Data View -->
   <div id="header">
     <img id="defender_front" src="static/defender_front.png" alt="Defender Front Image">
   </div>
-
-  <!-- Data View -->
   <div id="data-view" class="sections-container">
+    <!-- Login Section -->
     <div id="login-section" class="section">
       <div class="section-header">Login</div>
       <form id="login-form" onsubmit="attemptLogin(); return false;">
@@ -132,67 +139,51 @@
       </form>
     </div>
 
+    <!-- HV Battery Section -->
     <div class="section" id="hv-battery">
       <div class="section-header">HV Battery</div>
       <div class="message-field">
-        <p id="hv-soc">HV SoC: </p>
+        <p id="hv-soc">HV SoC: --%</p>
       </div>
       <div class="message-field">
-        <p id="hv-voltage">HV Voltage: </p>
+        <p id="hv-voltage">HV Voltage: --V</p>
       </div>
       <div class="message-field">
-        <p id="temperature">Temperature: </p>
+        <p id="temperature">Temperature: --°C</p>
       </div>
       <div class="message-field">
-        <p id="heater_status">Battery Heater Status: </p>
+        <p id="heater_status">Battery Heater Status: off</p>
       </div>
     </div>
 
+    <!-- LV Battery Section -->
     <div class="section" id="lv-battery">
       <div class="section-header">LV Battery</div>
       <div class="message-field">
-        <p id="lv-voltage">LV Voltage: </p>
+        <p id="lv-voltage">LV Voltage: --V</p>
       </div>
       <div class="message-field">
-        <p id="lv-soc">LV SOC: </p>
-      </div>
-    </div>
-    <div class="section" id="dc-dc-converter">
-      <div class="section-header">DC-DC Converter</div>
-      <div class="message-field">
-        <p id="dc-dc_status">DC-DC Status: </p>
-      </div>
-      <div class="message-field">
-        <p id="dc-dc_current">DC-DC Current: </p>
-      </div>
-      <div class="message-field">
-        <p id="dc-dc_power">DC-DC Power: </p>
+        <p id="lv-soc">LV SOC: --%</p>
       </div>
     </div>
   </div>
 
   <!-- Simple View -->
   <div id="simple-view">
-    <div id="hv-soc-simple" style="font-size: 2em;">
-      <span style="font-size: 3em;">🔋</span>
-      <span id="simple-hv-soc">--%</span>
-    </div>
-    <div id="hv-voltage-simple" style="font-size: 2em;">
-      <span style="font-size: 3em;">⚡</span>
-      <span id="simple-hv-voltage">--V</span>
-    </div>
-    <div id="temperature-simple" style="font-size: 2em;">
-      <span style="font-size: 3em;">🌡️</span>
-      <span id="simple-temperature">--°C</span>
-    </div>
-    <div id="heater-status-simple" style="font-size: 2em;">
-      <span id="simple-heater-icon" style="font-size: 3em; color: white;">〰️</span>
-    </div>
+    <p><span class="icon">🔋</span><span id="simple-hv-soc">--%</span></p>
+    <p><span class="icon">⚡</span><span id="simple-hv-voltage">--V</span></p>
+    <p><span class="icon">🌡️</span><span id="simple-temperature">--°C</span></p>
+    <p><span id="simple-heater-icon" class="icon" style="color: white;">〰️</span></p>
   </div>
 
   <script>
-    let client;
+    // Ensure simple-view is hidden when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById('data-view').style.display = 'flex'; // Show data view initially
+      document.getElementById('simple-view').style.display = 'none'; // Hide simple view initially
+    });
 
+    // Toggle view logic
     function toggleView() {
       const dataView = document.getElementById('data-view');
       const simpleView = document.getElementById('simple-view');
@@ -210,6 +201,7 @@
       }
     }
 
+    // Update simple-view values
     function updateSimpleView() {
       const hvSoc = document.getElementById('hv-soc').textContent.split(': ')[1] || '--%';
       document.getElementById('simple-hv-soc').textContent = hvSoc;
@@ -223,10 +215,6 @@
       const heaterStatus = document.getElementById('heater_status').textContent.split(': ')[1] || 'off';
       const heaterIcon = document.getElementById('simple-heater-icon');
       heaterIcon.style.color = heaterStatus.trim().toLowerCase() === 'on' ? 'red' : 'white';
-    }
-
-    function attemptLogin() {
-      // Login logic...
     }
   </script>
 </body>
