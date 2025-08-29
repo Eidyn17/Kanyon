@@ -109,13 +109,13 @@ function attemptLogin() {
 
   client.on('message', (topic, message) => {
     if (topic === 'AC/send_IR') {
-      logMessage("Sent command to broker.");
+        logMessage("Sent command to broker.");
     } else if (topic === 'AC/IR_sent') {
-      logMessage("Message received from device: IR blast sent!");
+        logMessage("Message received from device: IR blast sent!");
     } else if (topic === 'AC/picostatus') {
-      logMessage("Keepalive ping received");
+        logMessage("Keepalive ping received. Device is ready.");
     }
-  });
+});
 
   client.on('error', (error) => {
     console.error('MQTT Error:', error);
