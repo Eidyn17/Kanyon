@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A/C Control</title>
+  <link rel="icon" type="image/x-icon" href="favicon-96x96.ico">
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <style>
+    body {
+      font-family: 'Amazon Ember', sans-serif;
+      background-color: #100030;
+      color: white;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .section {
+      margin: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #5a41fa;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    #message-log {
+      height: 150px;
+      overflow-y: auto;
+      background-color: #1a0030;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 0.9em;
+    }
+    button {
+      font-size: 1em;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 8px;
+      background-color: #4631d3;
+      color: white;
+      border: none;
+    }
+    button:hover {
+      background-color: #5a41fa;
+    }
+  </style>
+</head>
+<body>
+
+<div id="login-section" class="section">
+  <h2>Login</h2>
+  <form id="login-form" onsubmit="attemptLogin(); return false;">
+    <input type="text" id="username" placeholder="Username" required><br><br>
+    <input type="password" id="password" placeholder="Password" required><br><br>
+    <button type="submit">Login</button>
+  </form>
+</div>
+
+<div id="control-section" class="section" style="display:none;">
+  <h2>A/C Control</h2>
+  <button onclick="sendIR()">Send IR Command</button>
+  <div id="message-log"></div>
+</div>
+
+<script>
+let client;
+
+function logMessage(msg) {
+  const logDiv = document.getElementById('message-log');
+  logDiv.innerHTML += `<p>${msg}</p>`;
+  logDiv.scrollTop = logDiv.scrollHeight;
+}
+
+function attemptLogin() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  if (client) client.end();
+
+  const options = {
+    username: username,
+    password: password,
+    protocol: 'wss',
+    port: 8884,
+    path: '/mqtt',
+    clean: true,
+    protocolVersion: 5,
+  };
+
+  client = mqtt.connect('tls://95ea70d6edb34e4a956c8f346ae8fba8.s1.eu.hivemq.cloud:8884', options);
+
+  client.on('connect', () => {
+    console.log('Connected!');
+    document.getElementById('login-section').style.display = 'none';
+    document.getElementById('control-section').style.display = 'block';
+
+    // Subscribe to both topics
+    client.subscribe('AC/send_IR');
+    client.subscribe('AC/IR_sent');
+  });
+
+  client.on('message', (topic, message) => {
+    logMessage(`Topic: ${topic}, Message: ${message.toString()}`);
+  });
+
+  client.on('error', (error) => {
+    console.error('MQTT Error:', error);
+    client.end();
+    alert('MQTT connection failed. Check credentials.');
+  });
+}
+
+function sendIR() {
+  if (client && client.connected) {
+    client.publish('AC/send_IR', '1');
+    logMessage('Sent IR command (1) to AC/send_IR');
+  } else {
+    alert('Not connected to MQTT');
+  }
+}
+</script>
+</body>
+</html>
